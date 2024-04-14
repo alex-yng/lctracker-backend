@@ -5,6 +5,7 @@ from rest_framework import generics
 from .models import Note
 from .serializers import NoteSerializer
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 
 # Create your views here.
 # create a view that lists (using restframework) all note objects using the note serializer
@@ -32,3 +33,12 @@ class NoteListView(APIView):
             
         serializer = NoteSerializer(notes, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET', 'POST'])
+def MakeNote(request):
+    if request.method == 'POST':
+        print(request.data)
+        Note.objects.create(title=request.data['title'], content=request.data['content'])
+        return Response(status=status.HTTP_201_CREATED)
+    else:
+        return Note.objects.all()

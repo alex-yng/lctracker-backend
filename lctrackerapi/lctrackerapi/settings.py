@@ -25,7 +25,11 @@ SECRET_KEY = 'django-insecure-m^mfn*g%!$5_^nph^dw9=shk)d-+b88=7oe-4ssoc&7dlrtnk7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "*",
+]
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 
 # Application definition
@@ -39,9 +43,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api',
     'rest_framework',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -77,8 +83,12 @@ WSGI_APPLICATION = 'lctrackerapi.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'lctracker_db',
+        'USER': 'alexdb',
+        'PASSWORD': 'password',
+        'HOST': 'lctracker-db.cjme62m6633i.us-east-2.rds.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
