@@ -13,6 +13,9 @@ class NoteRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
 @api_view(['POST'])
 def MakeNote(request):
+    if Note.objects.filter(title=request.data['title']).exists():
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    
     Note.objects.create(title=request.data['title'], content=request.data['content'])
     return Response(status=status.HTTP_201_CREATED)
 
