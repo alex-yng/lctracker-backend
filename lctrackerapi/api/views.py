@@ -11,6 +11,8 @@ class NoteRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = NoteSerializer
     lookup_field = 'pk' # primary key
 
+# CRUD operations
+# Create a note
 @api_view(['POST'])
 def MakeNote(request):
     if Note.objects.filter(title=request.data['title']).exists():
@@ -18,22 +20,22 @@ def MakeNote(request):
     
     Note.objects.create(title=request.data['title'], content=request.data['content'])
     return Response(status=status.HTTP_201_CREATED)
-    
+
+# Get all notes
 @api_view(['GET'])
 def GetNotes(request):
     notes = Note.objects.all()
     serializer = NoteSerializer(notes, many=True)
     return Response(serializer.data)
 
-@api_view(['DELETE'])
-def DeleteNote(request, probID):
-    if probID:
-        note = Note.objects.get(title=probID)
-        note.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    else:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-    
+# Get a specific note
+@api_view(['GET'])
+def GetNote(request, probID):
+    note = Note.objects.get(title=probID)
+    serializer = NoteSerializer(note)
+    return Response(serializer.data)
+
+# Update a note
 @api_view(['PUT'])
 def UpdateNote(request, probID):
     if probID:
@@ -43,3 +45,14 @@ def UpdateNote(request, probID):
         return Response(status=status.HTTP_200_OK)
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+# Delete a note
+@api_view(['DELETE'])
+def DeleteNote(request, probID):
+    if probID:
+        note = Note.objects.get(title=probID)
+        note.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    
