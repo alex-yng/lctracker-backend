@@ -18,7 +18,6 @@ def MakeNote(request):
     
     Note.objects.create(title=request.data['title'], content=request.data['content'])
     return Response(status=status.HTTP_201_CREATED)
-
     
 @api_view(['GET'])
 def GetNotes(request):
@@ -32,5 +31,15 @@ def DeleteNote(request, probID):
         note = Note.objects.get(title=probID)
         note.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['PUT'])
+def UpdateNote(request, probID):
+    if probID:
+        note = Note.objects.get(title=probID)
+        note.content = request.data['content']
+        note.save()
+        return Response(status=status.HTTP_200_OK)
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
