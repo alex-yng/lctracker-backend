@@ -7,7 +7,5 @@ urlpatterns = [
     # Custom CRUD operations
     path('notes/create/',views.MakeNote, name='note-create'),
     path('notes/',views.GetNotes, name='note-get'),
-    path('notes/<str:probID>/', views.GetNote, name='note-get-specific'),
-    path('notes/<str:probID>/', views.UpdateNote, name='note-update'),
-    path('notes/<str:probID>/', views.DeleteNote, name='note-delete'),
+    path('notes/<str:probID>/', views.ModifyNote, name='note-modify'),
 ]
