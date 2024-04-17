@@ -12,21 +12,21 @@ class NoteRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'pk' # primary key
 
 # CRUD operations
-# Create a note
-@api_view(['POST'])
-def MakeNote(request):
-    if Note.objects.filter(title=request.data['title']).exists():
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+# Get all notes or create note
+@api_view(['GET', 'POST'])
+def GetCreateNotes(request):
+    if request.method == 'GET':
+        notes = Note.objects.all()
+        serializer = NoteSerializer(notes, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        if Note.objects.filter(title=request.data['title']).exists():
+            return Response(status=status.HTTP_400_BAD_REQUEST)
     
-    Note.objects.create(title=request.data['title'], content=request.data['content'])
-    return Response(status=status.HTTP_201_CREATED)
-
-# Get all notes
-@api_view(['GET'])
-def GetNotes(request):
-    notes = Note.objects.all()
-    serializer = NoteSerializer(notes, many=True)
-    return Response(serializer.data)
+        Note.objects.create(title=request.data['title'], content=request.data['content'])
+        return Response(status=status.HTTP_201_CREATED)
+    
+    return Response(status=status.HTTP_400_BAD_REQUEST)
 
 # Get a specific note, update a note, delete a note
 @api_view(['GET', 'PUT', 'DELETE'])
